@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miles Morales | Web Slinger & Full-Stack Developer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Ambient Multiverse Glitch overlay -->
+    <div class="glitch-overlay"></div>
+    <div class="scanlines"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+
+    <!-- Interactive Background particles for Venom Blast / webs -->
+    <canvas id="bg-particles"></canvas>
+
+    <!-- Top HUD Navigation -->
+    <header class="hud-header">
+        <div class="hud-logo">
+            <svg class="spider-logo-svg" viewBox="0 0 100 100" width="50" height="50">
+                <!-- Spray painted spider emblem -->
+                <path d="M 50 12 C 47 18, 43 25, 38 28 C 34 25, 29 23, 22 23 C 25 29, 29 33, 35 34 C 28 36, 18 36, 10 33 C 16 38, 26 40, 33 40 C 25 43, 14 47, 5 50 C 13 52, 23 52, 31 49 C 27 54, 18 63, 8 72 C 18 69, 28 62, 33 55 C 33 62, 35 75, 40 85 C 44 80, 47 70, 48 60 C 49 60, 51 60, 52 60 C 53 70, 56 80, 60 85 C 65 75, 67 62, 67 55 C 72 62, 82 69, 92 72 C 82 63, 73 54, 69 49 C 77 52, 87 52, 95 50 C 86 47, 75 43, 67 40 C 74 40, 84 38, 90 33 C 82 36, 72 36, 65 34 C 71 33, 75 29, 78 23 C 71 23, 66 25, 62 28 C 57 25, 53 18, 50 12 Z" fill="#ff0044" />
+                <circle cx="50" cy="38" r="4" fill="#121216" />
+                <!-- Neon bio-electricity overlay paths -->
+                <path class="bio-glow-path" d="M 50 20 L 50 55 M 35 34 L 50 42 L 65 34 M 31 49 L 50 45 L 69 49" stroke="#ffe600" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+            </svg>
+            <span class="logo-text glitch-text" data-text="MILES.M">MILES.M</span>
+        </div>
+        <nav class="hud-nav">
+            <ul>
+                <li><a href="#hero" class="nav-link active"><span class="nav-num">// 01</span> <span class="nav-txt">LAUNCH</span></a></li>
+                <li><a href="#bio" class="nav-link"><span class="nav-num">// 02</span> <span class="nav-txt">DOSSIER</span></a></li>
+                <li><a href="#gear" class="nav-link"><span class="nav-num">// 03</span> <span class="nav-txt">GEAR</span></a></li>
+                <li><a href="#missions" class="nav-link"><span class="nav-num">// 04</span> <span class="nav-txt">MISSIONS</span></a></li>
+                <li><a href="#playground" class="nav-link"><span class="nav-num">// 05</span> <span class="nav-txt">WALL</span></a></li>
+                <li><a href="#comlink" class="nav-link"><span class="nav-num">// 06</span> <span class="nav-txt">COMLINK</span></a></li>
+            </ul>
+        </nav>
+        <div class="hud-actions">
+            <button id="camouflage-btn" class="hud-btn" title="Toggle Camouflage Mode">
+                <i class="fa-solid fa-ghost"></i> <span>CAMO</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main>
+        
+        <!-- SECTION 1: HERO -->
+        <section id="hero" class="section hero-section">
+            <div class="hero-content">
+                <div class="tagline-container">
+                    <span class="hud-badge glitch-text" data-text="SUIT ONLINE">SUIT ONLINE</span>
+                    <span class="hud-badge secondary">V.2.4.2</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="line-1">BROOKLYN'S</span>
+                    <span class="line-2 red-glow glitch-text" data-text="SPIDER-MAN">SPIDER-MAN</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Full-Stack Web Developer & part-time neighborhood protector. Crafting high-performance frontend interfaces and secure backend web systems with bio-electric velocity.
+                </p>
+                <div class="hero-actions">
+                    <a href="#missions" class="btn primary-btn"><i class="fa-solid fa-crosshairs"></i> View Missions</a>
+                    <a href="#comlink" class="btn secondary-btn"><i class="fa-solid fa-message"></i> Send Signal</a>
+                </div>
+            </div>
+
+            <!-- Interactive HUD Music Player (Brooklyn Beats) -->
+            <div class="beats-player" id="beats-player">
+                <div class="player-top">
+                    <div class="player-visualizer-container">
+                        <canvas id="player-visualizer"></canvas>
+                    </div>
+                    <div class="player-info">
+                        <span class="player-label"><i class="fa-solid fa-headphones"></i> BROOKLYN BEATS</span>
+                        <h4 class="track-title" id="track-title">Synthesizing...</h4>
+                        <span class="track-artist">Spider-Synth V1</span>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <button class="player-btn" id="play-prev" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+                    <button class="player-btn play-pause-btn" id="play-pause" title="Play/Pause"><i class="fa-solid fa-play"></i></button>
+                    <button class="player-btn" id="play-next" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+                    
+                    <div class="vol-slider-container">
+                        <i class="fa-solid fa-volume-low"></i>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </div>
+                </div>
+                <div class="player-status-bar">
+                    <span id="synth-status">Press PLAY to generate lofi beats</span>
+                </div>
+            </div>
+            
+            <div class="hero-scroll-indicator">
+                <span>SWIPE DOWN</span>
+                <div class="chevron-animated">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: BIO (DOSSIER) -->
+        <section id="bio" class="section bio-section">
+            <div class="section-header">
+                <h2 class="section-title"><span class="title-num">// 02</span> DOSSIER: MILES MORALES</h2>
+                <div class="title-bar"></div>
+            </div>
+            <div class="bio-grid">
+                <!-- Polaroid / Sketchbook Card -->
+                <div class="bio-visual-card">
+                    <div class="sketchbook-border">
+                        <div class="polaroid-wrapper">
+                            <div class="polaroid">
+                                <div class="polaroid-img-placeholder">
+                                    <!-- Animated SVG of Miles in hoodie with headphones -->
+                                    <svg viewBox="0 0 200 200" class="miles-portrait-svg">
+                                        <defs>
+                                            <radialGradient id="neon-glow" cx="50%" cy="50%" r="50%">
+                                                <stop offset="0%" stop-color="#ffe600" stop-opacity="0.3"/>
+                                                <stop offset="100%" stop-color="#ffe600" stop-opacity="0"/>
+                                            </radialGradient>
+                                        </defs>
+                                        <!-- Glow -->
+                                        <circle cx="100" cy="100" r="80" fill="url(#neon-glow)" />
+                                        <!-- Brick Wall BG pattern -->
+                                        <pattern id="brick-pat" width="20" height="10" patternUnits="userSpaceOnUse">
+                                            <rect width="20" height="10" fill="none" stroke="#222" stroke-width="0.5" />
+                                            <line x1="0" y1="5" x2="20" y2="5" stroke="#222" stroke-width="0.5" />
+                                            <line x1="10" y1="0" x2="10" y2="5" stroke="#222" stroke-width="0.5" />
+                                            <line x1="0" y1="5" x2="0" y2="10" stroke="#222" stroke-width="0.5" />
+                                            <line x1="20" y1="5" x2="20" y2="10" stroke="#222" stroke-width="0.5" />
+                                        </pattern>
+                                        <rect x="20" y="20" width="160" height="160" rx="10" fill="url(#brick-pat)"/>
+                                        
+                                        <!-- Miles Hoodie Silhouette with Graffiti Tagging -->
+                                        <!-- Shadow -->
+                                        <path d="M 50 170 C 50 130, 70 100, 100 100 C 130 100, 150 130, 150 170 Z" fill="#0c0c0e" stroke="#ff0044" stroke-width="2"/>
+                                        <!-- Hoodie hood -->
+                                        <path d="M 100 60 C 65 60, 65 110, 100 120 C 135 110, 135 60, 100 60 Z" fill="#e21b3c"/>
+                                        <!-- Inner Face mask -->
+                                        <path d="M 100 68 C 75 68, 75 105, 100 112 C 125 105, 125 68, 100 68 Z" fill="#0b0b0d" stroke="#fff" stroke-width="0.5"/>
+                                        <!-- Spider Eyes -->
+                                        <path d="M 85 85 C 93 85, 96 92, 97 97 C 90 97, 83 91, 85 85 Z" fill="#ffffff" stroke="#fff" stroke-width="1"/>
+                                        <path d="M 115 85 C 107 85, 104 92, 103 97 C 110 97, 117 91, 115 85 Z" fill="#ffffff" stroke="#fff" stroke-width="1"/>
+                                        
+                                        <!-- Headphones -->
+                                        <path d="M 68 85 C 68 50, 132 50, 132 85" fill="none" stroke="#ffe600" stroke-width="6" stroke-linecap="round"/>
+                                        <rect x="62" y="80" width="12" height="20" rx="4" fill="#ffe600"/>
+                                        <rect x="126" y="80" width="12" height="20" rx="4" fill="#ffe600"/>
+                                        
+                                        <!-- Spray can details -->
+                                        <circle cx="45" cy="140" r="6" fill="#ffe600"/>
+                                        <line x1="45" y1="146" x2="45" y2="160" stroke="#ffe600" stroke-width="2"/>
+                                        <!-- Bio-Electricity Spark -->
+                                        <path d="M 100 130 L 105 140 L 95 148 L 102 160" stroke="#ffe600" stroke-width="2" fill="none" stroke-linecap="round" class="pulse-glow"/>
+                                    </svg>
+                                </div>
+                                <div class="polaroid-caption">
+                                    <p class="handwritten">Brooklyn, NY — 2026</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio Content and Suit Stats HUD -->
+                <div class="bio-info-card">
+                    <h3 class="bio-tagline">"Anyone can wear the mask. You can wear the mask."</h3>
+                    <p class="bio-text">
+                        Hey, I'm Miles. By day, I study Computer Science at the <strong>Brooklyn Visions Academy</strong> and produce custom beats in my dorm room. By night, I watch over the city. 
+                    </p>
+                    <p class="bio-text">
+                        I bridge the gap between street-level creativity and high-tech software engineering. Whether debugging a complex backend API or swinging through high-traffic user interfaces, I bring energy, agility, and a unique perspective to every codebase.
+                    </p>
+
+                    <!-- Suit stats telemetry -->
+                    <div class="suit-telemetry">
+                        <div class="telemetry-header">
+                            <span><i class="fa-solid fa-circle-nodes"></i> SUIT TELEMETRY & CAPABILITIES</span>
+                            <span class="pulse-dot"></span>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>AGILITY (FRONTEND/UI)</span>
+                                <span class="stat-val">95%</span>
+                            </div>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>VENOM DISCHARGE (BACKEND ENGINE)</span>
+                                <span class="stat-val">90%</span>
+                            </div>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar venom" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>ACTIVE CAMOUFLAGE (SECURITY/PERF)</span>
+                                <span class="stat-val">88%</span>
+                            </div>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar camo" style="width: 88%"></div>
+                            </div>
+                        </div>
+
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>SPIDER-SENSE (BUG DETECTION)</span>
+                                <span class="stat-val">98%</span>
+                            </div>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar sense" style="width: 98%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: GEAR & SKILLS (SUIT UPGRADES) -->
+        <section id="gear" class="section gear-section">
+            <div class="section-header">
+                <h2 class="section-title"><span class="title-num">// 03</span> SUIT UPGRADES (SKILLS)</h2>
+                <div class="title-bar"></div>
+            </div>
+            
+            <p class="section-desc">Hover over each suit module to charge it with bio-electric Venom power and inspect tech integrations.</p>
+
+            <div class="skills-grid">
+                <!-- Skill Module 1: Web Shooters -->
+                <div class="skill-card" data-power="webs">
+                    <div class="skill-icon-wrapper">
+                        <i class="fa-solid fa-spider"></i>
+                    </div>
+                    <h3 class="skill-title">WEB SHOOTERS</h3>
+                    <span class="skill-subtitle">Frontend Architecture</span>
+                    <p class="skill-desc">Connecting nodes seamlessly. Crafting structural, fluid user interfaces that stick.</p>
+                    <div class="tech-tags">
+                        <span>HTML5</span>
+                        <span>CSS3</span>
+                        <span>JavaScript</span>
+                        <span>React</span>
+                        <span>Svelte</span>
+                        <span>Tailwind</span>
+                    </div>
+                    <div class="charge-indicator"></div>
+                </div>
+
+                <!-- Skill Module 2: Venom Blast -->
+                <div class="skill-card" data-power="venom">
+                    <div class="skill-icon-wrapper venom-glow">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="skill-title">VENOM BLAST</h3>
+                    <span class="skill-subtitle">Backend / Bio-Electric Engine</span>
+                    <p class="skill-desc">Discharging high-voltage compute power. Fast backend processes and highly charged database queries.</p>
+                    <div class="tech-tags">
+                        <span>Node.js</span>
+                        <span>Express</span>
+                        <span>PostgreSQL</span>
+                        <span>MongoDB</span>
+                        <span>GraphQL</span>
+                        <span>WebSockets</span>
+                    </div>
+                    <div class="charge-indicator"></div>
+                </div>
+
+                <!-- Skill Module 3: Active Camouflage -->
+                <div class="skill-card" data-power="camo">
+                    <div class="skill-icon-wrapper camo-glow">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </div>
+                    <h3 class="skill-title">ACTIVE CAMOUFLAGE</h3>
+                    <span class="skill-subtitle">DevOps & Security Shimmer</span>
+                    <p class="skill-desc">Operating in stealth mode. Shielding endpoints, securing traffic, and automated unit testing pipelines.</p>
+                    <div class="tech-tags">
+                        <span>Docker</span>
+                        <span>AWS</span>
+                        <span>Jest</span>
+                        <span>Git/GitHub</span>
+                        <span>JWT Security</span>
+                        <span>CI/CD</span>
+                    </div>
+                    <div class="charge-indicator"></div>
+                </div>
+
+                <!-- Skill Module 4: Visor HUD -->
+                <div class="skill-card" data-power="hud">
+                    <div class="skill-icon-wrapper visor-glow">
+                        <i class="fa-solid fa-circle-dot"></i>
+                    </div>
+                    <h3 class="skill-title">VISOR HUD</h3>
+                    <span class="skill-subtitle">UI/UX & Spider-Sense</span>
+                    <p class="skill-desc">Real-time heuristics, structural mapping, accessibility targets, and pixel-perfect design assets.</p>
+                    <div class="tech-tags">
+                        <span>Figma</span>
+                        <span>SVG Motion</span>
+                        <span>SEO Heuristics</span>
+                        <span>a11y Standards</span>
+                        <span>Web Performance</span>
+                    </div>
+                    <div class="charge-indicator"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: MISSIONS (PROJECTS) -->
+        <section id="missions" class="section missions-section">
+            <div class="section-header">
+                <h2 class="section-title"><span class="title-num">// 04</span> COMPLETED MISSIONS (PROJECTS)</h2>
+                <div class="title-bar"></div>
+            </div>
+
+            <div class="missions-grid">
+                <!-- Mission Card 1 -->
+                <div class="mission-card" data-mission="roxxon">
+                    <div class="mission-thumb">
+                        <div class="mission-image-sim roxxon-sim">
+                            <div class="sim-overlay"></div>
+                            <div class="sim-content">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span class="sim-tag">ROXXON DECRYPTOR</span>
+                            </div>
+                        </div>
+                        <div class="mission-badge active">CRITICAL SUCCESS</div>
+                    </div>
+                    <div class="mission-info">
+                        <span class="mission-meta">MISSION CODE: ROXXON-DEC</span>
+                        <h3 class="mission-name">Roxxon Core Decryptor</h3>
+                        <p class="mission-summary">
+                            Hacked into a secure network nodes pipeline. Built a live decryptor dashboard to visual and analyze data packets.
+                        </p>
+                        <div class="mission-tech">
+                            <span>React</span>
+                            <span>Tailwind</span>
+                            <span>Web Crypto API</span>
+                        </div>
+                        <button class="mission-btn" data-target="roxxon">Access Mission Briefing <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Mission Card 2 -->
+                <div class="mission-card" data-mission="tracer">
+                    <div class="mission-thumb">
+                        <div class="mission-image-sim tracer-sim">
+                            <div class="sim-overlay"></div>
+                            <div class="sim-content">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <span class="sim-tag">BROOKLYN TRACER HUD</span>
+                            </div>
+                        </div>
+                        <div class="mission-badge active">ACTIVE MONITORING</div>
+                    </div>
+                    <div class="mission-info">
+                        <span class="mission-meta">MISSION CODE: TRACER-MAP</span>
+                        <h3 class="mission-name">Spider-Tracer GeoHUD</h3>
+                        <p class="mission-summary">
+                            Real-time geospatial map application tracking simulated local incidents and alerts across Brooklyn and Manhattan.
+                        </p>
+                        <div class="mission-tech">
+                            <span>Node.js</span>
+                            <span>Socket.io</span>
+                            <span>Leaflet Maps</span>
+                        </div>
+                        <button class="mission-btn" data-target="tracer">Access Mission Briefing <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Mission Card 3 -->
+                <div class="mission-card" data-mission="bva">
+                    <div class="mission-thumb">
+                        <div class="mission-image-sim bva-sim">
+                            <div class="sim-overlay"></div>
+                            <div class="sim-content">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span class="sim-tag">BVA STUDENT HUD</span>
+                            </div>
+                        </div>
+                        <div class="mission-badge completed">DEPLOYED</div>
+                    </div>
+                    <div class="mission-info">
+                        <span class="mission-meta">MISSION CODE: BVA-PORTAL</span>
+                        <h3 class="mission-name">Brooklyn Visions Portal</h3>
+                        <p class="mission-summary">
+                            Student dashboard portal with schedules, class forums, and file submission systems. Mentored by Peter Parker.
+                        </p>
+                        <div class="mission-tech">
+                            <span>Vue3</span>
+                            <span>Firebase</span>
+                            <span>Chart.js</span>
+                        </div>
+                        <button class="mission-btn" data-target="bva">Access Mission Briefing <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Details Hologram Modal (Hidden by Default) -->
+        <div class="mission-modal" id="mission-modal">
+            <div class="modal-backdrop"></div>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <div class="header-prefix">
+                        <span class="glitch-text" id="modal-code">// MISSION CODE</span>
+                        <span class="pulse-dot"></span>
+                    </div>
+                    <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <h2 class="modal-title" id="modal-title">Mission Briefing</h2>
+                    <div class="modal-grid">
+                        <div class="modal-main-desc">
+                            <h3>OBJECTIVE</h3>
+                            <p id="modal-desc">Loading details...</p>
+                            
+                            <h3>OUTCOME & METRICS</h3>
+                            <ul id="modal-metrics">
+                                <li>Loading...</li>
+                            </ul>
+                        </div>
+                        <div class="modal-sidebar-info">
+                            <div class="hud-box">
+                                <h4>INTEGRATED GEAR</h4>
+                                <div class="tech-tags" id="modal-tags">
+                                    <!-- Dynamic -->
+                                </div>
+                            </div>
+                            <div class="hud-box secondary">
+                                <h4>SYSTEM STATUS</h4>
+                                <p id="modal-status">Secure</p>
+                            </div>
+                            <button class="btn primary-btn btn-full" id="modal-link">
+                                <i class="fa-solid fa-circle-check"></i> ACTIVE DEPLOYMENT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: PLAYGROUND (GRAFFITI WALL) -->
+        <section id="playground" class="section playground-section">
+            <div class="section-header">
+                <h2 class="section-title"><span class="title-num">// 05</span> BROOKLYN GRAFFITI WALL</h2>
+                <div class="title-bar"></div>
+            </div>
+            <p class="section-desc">Spray your own tag on the brick wall! Custom canvas tags can be downloaded as png files.</p>
+            
+            <div class="canvas-workspace">
+                <div class="canvas-controls">
+                    <div class="control-group">
+                        <label>SPRAY PAINT COLOR</label>
+                        <div class="color-palette">
+                            <button class="color-btn active" data-color="#ff0044" style="background-color: #ff0044;" title="Spider Red"></button>
+                            <button class="color-btn" data-color="#ffe600" style="background-color: #ffe600;" title="Venom Yellow"></button>
+                            <button class="color-btn" data-color="#00ffcc" style="background-color: #00ffcc;" title="Camo Cyan"></button>
+                            <button class="color-btn" data-color="#bc00dd" style="background-color: #bc00dd;" title="Multiverse Purple"></button>
+                            <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff;" title="Web White"></button>
+                            <button class="color-btn" data-color="#121216" style="background-color: #121216;" title="Eraser Black"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>SPRAY SIZE: <span id="brush-size-display">25px</span></label>
+                        <input type="range" id="brush-slider" min="5" max="60" value="25">
+                    </div>
+                    
+                    <div class="control-group buttons-row">
+                        <button id="canvas-clear" class="btn outline-btn"><i class="fa-solid fa-trash-can"></i> Clear Wall</button>
+                        <button id="canvas-save" class="btn primary-btn"><i class="fa-solid fa-download"></i> Save Tag</button>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <!-- Brick backdrop and spray paint overlay canvas -->
+                    <canvas id="graffiti-canvas" width="800" height="400"></canvas>
+                    <div class="canvas-hud-overlay">
+                        <span>CANVAS TELEMETRY ACTIVATED</span>
+                        <span id="canvas-coordinates">X: 000 | Y: 000</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: COMLINK (CONTACT) -->
+        <section id="comlink" class="section comlink-section">
+            <div class="section-header">
+                <h2 class="section-title"><span class="title-num">// 06</span> COM-LINK ENCRYPTED TERMINAL</h2>
+                <div class="title-bar"></div>
+            </div>
+            
+            <div class="comlink-grid">
+                <!-- Smart Phone Chat Simulator -->
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="phone-header">
+                            <div class="phone-header-left">
+                                <span class="time-stamp">14:24</span>
+                                <span class="network-badge">5G // WEBS</span>
+                            </div>
+                            <div class="phone-header-center">
+                                <span class="contact-name">Ganke Lee</span>
+                                <span class="contact-status"><span class="pulse-dot green"></span> active</span>
+                            </div>
+                            <div class="phone-header-right">
+                                <i class="fa-solid fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-thread" id="chat-thread">
+                            <!-- Message 1 -->
+                            <div class="chat-bubble received">
+                                <p>Yo Miles, Roxxon decryption algorithms look tight. But did you secure the webhook connections?</p>
+                                <span class="bubble-time">14:15</span>
+                            </div>
+                            <!-- Message 2 -->
+                            <div class="chat-bubble sent">
+                                <p>Yeah, encrypted them with AES-256 and routed them through Brooklyn Vision servers. Stealth mode.</p>
+                                <span class="bubble-time">14:17</span>
+                            </div>
+                            <!-- Message 3 -->
+                            <div class="chat-bubble received">
+                                <p>Awesome. Hey, a client is looking for a web slinger who can spin up high-performance full stack web apps. I told them you're the one. Leave your signal here so they can contact you.</p>
+                                <span class="bubble-time">14:20</span>
+                            </div>
+                            <!-- Messages will dynamically insert here on submit -->
+                        </div>
+                        
+                        <div class="chat-input-bar">
+                            <span class="chat-placeholder-text">Encrypted Connection Active...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Encrypted Contact Form -->
+                <div class="contact-form-container">
+                    <form id="secure-contact-form" class="secure-form">
+                        <div class="form-header">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <h3>SECURE COM-LINK PROTOCOL</h3>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-name-input">TRANSMITTER IDENTIFICATION (NAME)</label>
+                            <input type="text" id="contact-name-input" placeholder="e.g. Peter Parker" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-email-input">RETURN FREQUENCY (EMAIL)</label>
+                            <input type="email" id="contact-email-input" placeholder="e.g. peter.parker@dailybugle.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-message-input">ENCRYPTED PAYLOAD (MESSAGE)</label>
+                            <textarea id="contact-message-input" rows="5" placeholder="Sling your thoughts or mission proposals here..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn primary-btn btn-full">
+                            <i class="fa-solid fa-paper-plane"></i> DISPATCH SECURE SIGNAL
+                        </button>
+                    </form>
+                    
+                    <div class="signal-hud-telemetry">
+                        <p><i class="fa-solid fa-satellite-dish animate-pulse"></i> SATELLITE COM LINK: STABLE</p>
+                        <p><i class="fa-solid fa-key"></i> END-TO-END SUIT ENCRYPTION: ACTIVE</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer HUD -->
+    <footer class="hud-footer">
+        <div class="footer-left">
+            <span class="footer-badge">© 2026 MILES MORALES</span>
+            <span class="footer-badge secondary">DESIGNED BY SPIDER-SUIT HUD</span>
+        </div>
+        <div class="footer-socials">
+            <a href="https://github.com" target="_blank" title="Spider-GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank" title="Web-LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://twitter.com" target="_blank" title="Spider-Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+        <div class="footer-right">
+            <span class="telemetry-timer" id="telemetry-timer">SYSTEM UP: 00:00:00</span>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript Code -->
+    <script src="index.js"></script>
+</body>
+</html>
